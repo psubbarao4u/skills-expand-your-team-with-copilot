@@ -4,12 +4,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const themeToggleIcon = document.getElementById("theme-toggle-icon");
   const themeToggleText = document.getElementById("theme-toggle-text");
 
+  // Theme constants
+  const THEME = {
+    LIGHT: 'light',
+    DARK: 'dark',
+    ICONS: {
+      LIGHT: '🌙',
+      DARK: '☀️'
+    },
+    LABELS: {
+      LIGHT: 'Dark',
+      DARK: 'Light'
+    }
+  };
+
   // Check for saved theme preference or default to light mode
-  const savedTheme = localStorage.getItem("theme") || "light";
-  if (savedTheme === "dark") {
+  const savedTheme = localStorage.getItem("theme") || THEME.LIGHT;
+  if (savedTheme === THEME.DARK) {
     document.body.classList.add("dark-mode");
-    themeToggleIcon.textContent = "☀️";
-    themeToggleText.textContent = "Light";
+    themeToggleIcon.textContent = THEME.ICONS.DARK;
+    themeToggleText.textContent = THEME.LABELS.DARK;
   }
 
   // Toggle theme
@@ -18,13 +32,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const isDarkMode = document.body.classList.contains("dark-mode");
     
     if (isDarkMode) {
-      themeToggleIcon.textContent = "☀️";
-      themeToggleText.textContent = "Light";
-      localStorage.setItem("theme", "dark");
+      themeToggleIcon.textContent = THEME.ICONS.DARK;
+      themeToggleText.textContent = THEME.LABELS.DARK;
+      localStorage.setItem("theme", THEME.DARK);
     } else {
-      themeToggleIcon.textContent = "🌙";
-      themeToggleText.textContent = "Dark";
-      localStorage.setItem("theme", "light");
+      themeToggleIcon.textContent = THEME.ICONS.LIGHT;
+      themeToggleText.textContent = THEME.LABELS.LIGHT;
+      localStorage.setItem("theme", THEME.LIGHT);
     }
   });
 
