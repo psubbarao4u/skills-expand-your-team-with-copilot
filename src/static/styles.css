@@ -650,7 +650,6 @@ footer {
 #user-controls {
   position: absolute;
   top: 10px;
-  right: 15px;
 }
 
 #user-status {
@@ -725,11 +724,21 @@ footer {
   font-size: 1.1rem;
 }
 
-/* Adjust user controls when both login and theme toggle are present */
-body:not(.dark-mode) #user-controls {
-  right: 120px; /* Make room for theme toggle */
+/* Adjust user controls to make room for theme toggle */
+#user-controls {
+  right: 120px;
 }
 
-body.dark-mode #user-controls {
-  right: 130px; /* Make room for theme toggle */
+/* Responsive adjustments for mobile */
+@media (max-width: 767px) {
+  #theme-toggle {
+    top: 5px;
+    right: 5px;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+
+  #user-controls {
+    right: 90px;
+  }
 }
