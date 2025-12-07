@@ -1,4 +1,47 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Dark mode functionality
+  const themeToggle = document.getElementById("theme-toggle");
+  const themeToggleIcon = document.getElementById("theme-toggle-icon");
+  const themeToggleText = document.getElementById("theme-toggle-text");
+
+  // Theme constants
+  const THEME = {
+    LIGHT: 'light',
+    DARK: 'dark',
+    ICONS: {
+      LIGHT: '🌙',
+      DARK: '☀️'
+    },
+    LABELS: {
+      LIGHT: 'Dark',
+      DARK: 'Light'
+    }
+  };
+
+  // Check for saved theme preference or default to light mode
+  const savedTheme = localStorage.getItem("theme") || THEME.LIGHT;
+  if (savedTheme === THEME.DARK) {
+    document.body.classList.add("dark-mode");
+    themeToggleIcon.textContent = THEME.ICONS.DARK;
+    themeToggleText.textContent = THEME.LABELS.DARK;
+  }
+
+  // Toggle theme
+  themeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+    const isDarkMode = document.body.classList.contains("dark-mode");
+    
+    if (isDarkMode) {
+      themeToggleIcon.textContent = THEME.ICONS.DARK;
+      themeToggleText.textContent = THEME.LABELS.DARK;
+      localStorage.setItem("theme", THEME.DARK);
+    } else {
+      themeToggleIcon.textContent = THEME.ICONS.LIGHT;
+      themeToggleText.textContent = THEME.LABELS.LIGHT;
+      localStorage.setItem("theme", THEME.LIGHT);
+    }
+  });
+
   // DOM elements
   const activitiesList = document.getElementById("activities-list");
   const messageDiv = document.getElementById("message");
