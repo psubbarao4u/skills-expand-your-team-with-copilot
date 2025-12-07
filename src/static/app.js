@@ -842,11 +842,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (button.classList.contains('share-facebook')) {
       // Facebook share
       const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`;
-      window.open(facebookUrl, '_blank', 'width=600,height=400');
+      window.open(facebookUrl, '_blank', 'width=600,height=400,scrollbars=yes,resizable=yes');
     } else if (button.classList.contains('share-twitter')) {
       // Twitter share
       const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
-      window.open(twitterUrl, '_blank', 'width=600,height=400');
+      window.open(twitterUrl, '_blank', 'width=600,height=400,scrollbars=yes,resizable=yes');
     } else if (button.classList.contains('share-email')) {
       // Email share
       const subject = `Activity: ${activityName}`;
