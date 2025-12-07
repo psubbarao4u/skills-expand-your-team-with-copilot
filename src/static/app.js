@@ -552,6 +552,25 @@ document.addEventListener("DOMContentLoaded", () => {
             .join("")}
         </ul>
       </div>
+      <div class="share-buttons">
+        <span class="share-label">Share:</span>
+        <button class="share-btn share-facebook tooltip" data-activity="${name}" data-description="${details.description.replace(/"/g, '&quot;')}" data-schedule="${formattedSchedule.replace(/"/g, '&quot;')}" aria-label="Share on Facebook">
+          <span class="share-icon">📘</span>
+          <span class="tooltip-text">Share on Facebook</span>
+        </button>
+        <button class="share-btn share-twitter tooltip" data-activity="${name}" data-description="${details.description.replace(/"/g, '&quot;')}" data-schedule="${formattedSchedule.replace(/"/g, '&quot;')}" aria-label="Share on Twitter">
+          <span class="share-icon">🐦</span>
+          <span class="tooltip-text">Share on Twitter</span>
+        </button>
+        <button class="share-btn share-email tooltip" data-activity="${name}" data-description="${details.description.replace(/"/g, '&quot;')}" data-schedule="${formattedSchedule.replace(/"/g, '&quot;')}" aria-label="Share via Email">
+          <span class="share-icon">✉️</span>
+          <span class="tooltip-text">Share via Email</span>
+        </button>
+        <button class="share-btn share-copy tooltip" data-activity="${name}" data-description="${details.description.replace(/"/g, '&quot;')}" data-schedule="${formattedSchedule.replace(/"/g, '&quot;')}" aria-label="Copy Link">
+          <span class="share-icon">🔗</span>
+          <span class="tooltip-text">Copy Link</span>
+        </button>
+      </div>
       <div class="activity-card-actions">
         ${
           currentUser
@@ -575,6 +594,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const deleteButtons = activityCard.querySelectorAll(".delete-participant");
     deleteButtons.forEach((button) => {
       button.addEventListener("click", handleUnregister);
+    });
+
+    // Add click handlers for share buttons
+    const shareButtons = activityCard.querySelectorAll(".share-btn");
+    shareButtons.forEach((button) => {
+      button.addEventListener("click", handleShare);
     });
 
     // Add click handler for register button (only when authenticated)
@@ -797,6 +822,80 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     );
+  }
+
+  // Handle share button clicks
+  function handleShare(event) {
+    const button = event.currentTarget;
+    const activityName = button.dataset.activity;
+    const description = button.dataset.description;
+    const schedule = button.dataset.schedule;
+    
+    // Create the share URL - currently points to the main page
+    // In a real app, this could be a deep link to the specific activity
+    const shareUrl = window.location.origin + window.location.pathname;
+    
+    // Create share text
+    const shareText = `Check out ${activityName} at Mergington High School! ${description} Schedule: ${schedule}`;
+    
+    // Determine which share button was clicked
+    if (button.classList.contains('share-facebook')) {
+      // Facebook share
+      const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`;
+      window.open(facebookUrl, '_blank', 'width=600,height=400');
+    } else if (button.classList.contains('share-twitter')) {
+      // Twitter share
+      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+      window.open(twitterUrl, '_blank', 'width=600,height=400');
+    } else if (button.classList.contains('share-email')) {
+      // Email share
+      const subject = `Activity: ${activityName}`;
+      const body = `${shareText}\n\nLearn more: ${shareUrl}`;
+      const mailtoUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailtoUrl;
+    } else if (button.classList.contains('share-copy')) {
+      // Copy link to clipboard
+      const textToCopy = `${shareText}\n${shareUrl}`;
+      
+      // Try to use the modern clipboard API
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(textToCopy)
+          .then(() => {
+            showMessage('Link copied to clipboard!', 'success');
+          })
+          .catch(err => {
+            console.error('Failed to copy:', err);
+            fallbackCopyToClipboard(textToCopy);
+          });
+      } else {
+        fallbackCopyToClipboard(textToCopy);
+      }
+    }
+  }
+
+  // Fallback copy method for older browsers
+  function fallbackCopyToClipboard(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+      const successful = document.execCommand('copy');
+      if (successful) {
+        showMessage('Link copied to clipboard!', 'success');
+      } else {
+        showMessage('Failed to copy link', 'error');
+      }
+    } catch (err) {
+      console.error('Fallback copy failed:', err);
+      showMessage('Failed to copy link', 'error');
+    }
+    
+    document.body.removeChild(textArea);
   }
 
   // Show message function
